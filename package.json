@@ -1,0 +1,21 @@
+{
+  "name": "tibo-radar",
+  "version": "1.0.0",
+  "description": "A live, independent radar for tracked Codex usage resets and banked reset signals",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "keywords": [
+    "codex",
+    "reset",
+    "radar",
+    "analytics"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/analytics": "^1.3.1"
+  }
+}
