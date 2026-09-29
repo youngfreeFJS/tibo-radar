@@ -11,7 +11,10 @@
 </p>
 
 <p align="center">
-  <a href="https://tibo-radar.vercel.app"><img src="https://img.shields.io/badge/live-tibo--radar.vercel.app-0b1012?style=flat-square&logo=vercel&logoColor=white" alt="Live dashboard" /></a>
+  <a href="https://tibo-radar.vercel.app"><img src="https://img.shields.io/badge/OPEN%20LIVE%20RADAR-tibo--radar.vercel.app-ff585d?style=for-the-badge&logo=vercel&logoColor=white" alt="Open the live TIBO / RADAR dashboard" height="42" /></a>
+</p>
+
+<p align="center">
   <a href="https://github.com/youngfreeFJS/tibo-radar/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-4b8bbe?style=flat-square" alt="Apache License 2.0" /></a>
   <img src="https://img.shields.io/badge/runtime-static%20HTML-101826?style=flat-square&logo=html5&logoColor=E34F26" alt="Static HTML runtime" />
   <img src="https://img.shields.io/badge/i18n-English%20%2F%20%E4%B8%AD%E6%96%87-111827?style=flat-square" alt="English and Chinese interfaces" />
