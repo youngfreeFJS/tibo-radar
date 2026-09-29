@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07090d" />
+    <meta
+      name="description"
+      content="A live, independent radar for tracked Codex usage resets and banked reset signals."
+    />
+    <link rel="preconnect" href="https://codex-reset.com" crossorigin />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%2380ffae'/%3E%3Cstop offset='1' stop-color='%2349b6ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='18' fill='%23070a0e'/%3E%3Cpath d='M32 13v38M13 32h38' stroke='url(%23g)' stroke-width='6' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='32' r='12' fill='none' stroke='%23fff' stroke-opacity='.88' stroke-width='3'/%3E%3C/svg%3E"
+    />
+    <title>TIBO / RADAR — Reset intelligence</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="atmosphere" aria-hidden="true"></div>
+    <header class="topbar shell">
+      <a class="brand" href="#top" aria-label="Tibo Radar home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span>TIBO<span class="brand-slash">/</span>RADAR</span>
+      </a>
+
+      <div class="topbar-status" aria-live="polite">
+        <span class="live-dot"></span>
+        <span id="connection-label">Connecting to source</span>
+      </div>
+
+      <div class="language-toggle" role="group" aria-label="Language selector">
+        <button class="language-option" type="button" data-language="zh" aria-pressed="false">中</button>
+        <span aria-hidden="true">/</span>
+        <button class="language-option" type="button" data-language="en" aria-pressed="true">EN</button>
+      </div>
+      <button class="refresh-button" id="refresh-button" type="button" aria-label="Refresh timeline data">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0 2.1 5.4M20 4v7h-7"/></svg>
+        <span data-i18n="refresh">Refresh</span>
+      </button>
+    </header>
+
+    <main class="shell" id="top">
+      <section class="hero-stage" aria-labelledby="page-title">
+        <img class="hero-photo" src="./assets/tibo-reset-hero.png" alt="Tibo pressing a large glowing red RESET button" data-i18n-alt="heroImageAlt" />
+        <div class="hero-veil" aria-hidden="true"></div>
+        <div class="hero-grain" aria-hidden="true"></div>
+        <div class="hero-ui">
+          <div class="hero-copy">
+            <div class="eyebrow hero-eyebrow"><span></span><b data-i18n="heroEyebrow">Independent reset monitor</b></div>
+            <h1 id="page-title" data-i18n-html="heroTitle"><span>When Tibo hits it,</span><em>we catch it.</em></h1>
+            <p class="masthead-copy" data-i18n="heroCopy">The live record of Codex resets, banked credits, and the signals that arrive just before the button moves.</p>
+            <div class="source-line">
+              <span data-i18n="feedUpdated">Feed updated</span>
+              <time id="feed-updated" datetime="">—</time>
+              <span class="source-separator">•</span>
+              <a href="https://codex-reset.com/api/timeline" target="_blank" rel="noreferrer"><span data-i18n="openSource">Open source</span> <span aria-hidden="true">↗</span></a>
+            </div>
+            <section class="hero-calendar" aria-labelledby="calendar-title">
+              <div class="calendar-heading">
+                <div><span class="section-label" id="calendar-title" data-i18n="resetCalendar">Reset calendar</span><strong id="calendar-month">—</strong></div>
+                <div class="calendar-legend" aria-label="Calendar legend"><span><i class="legend-reset"></i><b data-i18n="verifiedShort">Verified</b></span><span><i class="legend-banked"></i><b data-i18n="bankedShort">Banked</b></span></div>
+              </div>
+              <div class="calendar-weekdays" aria-hidden="true">
+                <span data-i18n="weekdaySun">S</span><span data-i18n="weekdayMon">M</span><span data-i18n="weekdayTue">T</span><span data-i18n="weekdayWed">W</span><span data-i18n="weekdayThu">T</span><span data-i18n="weekdayFri">F</span><span data-i18n="weekdaySat">S</span>
+              </div>
+              <div class="calendar-days" id="reset-calendar" role="grid" aria-label="Reset history calendar"></div>
+              <div class="calendar-forecast">
+                <div><span class="section-label" data-i18n="nextExpected">Next expected</span><strong id="next-expected-date">—</strong></div>
+                <p id="next-expected-detail">—</p>
+              </div>
+            </section>
+          </div>
+          <div class="hero-bottom-row">
+            <div class="hero-telemetry">
+              <div><span class="section-label" data-i18n="latestVerified">Latest verified reset</span><strong id="hero-latest-date">—</strong></div>
+              <div class="hero-telemetry-divider" aria-hidden="true"></div>
+              <div><span class="section-label" data-i18n="elapsed">Elapsed</span><strong id="hero-latest-age">—</strong></div>
+              <span class="hero-live"><i></i><b data-i18n="radarLive">Radar live</b></span>
+            </div>
+            <a class="enter-radar" href="#feed"><span data-i18n="enterRadar">Enter radar</span> <span aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="overview-grid" aria-label="Reset overview">
+        <article class="panel latest-panel">
+          <div class="panel-topline">
+            <span class="section-label" data-i18n="latestVerifiedHard">Latest verified hard reset</span>
+            <span class="verified-pill" id="latest-confidence">VERIFIED</span>
+          </div>
+          <div class="latest-body">
+            <div>
+              <p class="date-display" id="latest-date">—</p>
+              <p class="latest-subline" id="latest-subline">Waiting for the live timeline</p>
+            </div>
+            <div class="age-orbit" aria-label="Time since latest reset">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="50" pathLength="100" class="orbit-track" />
+                <circle id="age-ring" cx="60" cy="60" r="50" pathLength="100" class="orbit-value" />
+              </svg>
+              <div class="age-number"><strong id="age-value">—</strong><span data-i18n="since">since</span></div>
+            </div>
+          </div>
+          <div class="latest-footer">
+            <span id="latest-scope">All paid accounts</span>
+            <a id="latest-link" href="#feed"><span data-i18n="viewEvent">View event</span> <span aria-hidden="true">↘</span></a>
+          </div>
+        </article>
+
+        <article class="panel pulse-panel">
+          <div class="panel-topline">
+            <span class="section-label" data-i18n="resetPulse">Reset pulse</span>
+            <span class="muted-label" data-i18n="last90Days">Last 90 days</span>
+          </div>
+          <div class="pulse-stats">
+            <div><strong id="hard-reset-count">—</strong><span data-i18n="hardResets">hard resets</span></div>
+            <div><strong id="median-gap">—</strong><span data-i18n="medianGap">median gap</span></div>
+          </div>
+          <div class="spark-wrap">
+            <svg id="sparkline" viewBox="0 0 640 124" role="img" aria-label="Reset cadence over time" preserveAspectRatio="none"></svg>
+            <div class="spark-labels"><span id="spark-start">90d ago</span><span data-i18n="today">Today</span></div>
+          </div>
+        </article>
+
+        <article class="panel signal-panel">
+          <div class="panel-topline">
+            <span class="section-label" data-i18n="signalBoard">Signal board</span>
+            <span class="muted-label" data-i18n="allTime">All time</span>
+          </div>
+          <div class="signal-list">
+            <div><span class="signal-icon hard" aria-hidden="true">+</span><span data-i18n="resetEvent">Reset event</span><strong id="stat-reset">—</strong></div>
+            <div><span class="signal-icon banked" aria-hidden="true">◇</span><span data-i18n="bankedCredit">Banked credit</span><strong id="stat-credits">—</strong></div>
+            <div><span class="signal-icon preview" aria-hidden="true">◌</span><span data-i18n="previewWindow">Preview / window</span><strong id="stat-preview">—</strong></div>
+          </div>
+          <p class="signal-footnote" id="signal-footnote">Source events are categorized on arrival.</p>
+        </article>
+      </section>
+
+      <section class="timeline-section" id="feed" aria-labelledby="timeline-heading">
+        <div class="section-heading-row">
+          <div>
+            <p class="section-label" data-i18n="liveTimeline">Live timeline</p>
+            <h2 id="timeline-heading" data-i18n="timelineTitle">The reset record.</h2>
+          </div>
+          <div class="filter-tabs" role="tablist" aria-label="Filter timeline">
+            <button class="filter-tab is-active" type="button" role="tab" aria-selected="true" data-filter="all" data-i18n="filterAll">All</button>
+            <button class="filter-tab" type="button" role="tab" aria-selected="false" data-filter="hard" data-i18n="filterHard">Hard resets</button>
+            <button class="filter-tab" type="button" role="tab" aria-selected="false" data-filter="banked" data-i18n="filterBanked">Banked</button>
+            <button class="filter-tab" type="button" role="tab" aria-selected="false" data-filter="signals" data-i18n="filterSignals">Signals</button>
+          </div>
+        </div>
+
+        <div class="timeline-layout">
+          <div class="event-list" id="event-list" aria-live="polite" aria-busy="true">
+            <div class="loading-state"><span class="loader"></span> Loading the radar feed…</div>
+          </div>
+          <aside class="side-stack" aria-label="Timeline context">
+            <article class="panel rhythm-panel">
+              <div class="panel-topline"><span class="section-label" data-i18n="cadence">Cadence</span><span class="muted-label" data-i18n="tracked">tracked</span></div>
+              <div class="cadence-number" id="cadence-number">—</div>
+              <p id="cadence-detail">Calculating reset intervals from the timeline.</p>
+              <div class="cadence-scale" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            </article>
+            <article class="panel methodology-panel">
+              <span class="section-label" data-i18n="readingRadar">Reading the radar</span>
+              <p data-i18n-html="methodology"><b>Green</b> marks verified hard resets. <b>Blue</b> marks banked reset credits. Other items are context signals, not a promise of a reset.</p>
+            </article>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="shell footer">
+      <span data-i18n="footerLeft">Built for people watching their limits.</span>
+      <span data-i18n="footerRight">Not affiliated with OpenAI.</span>
+    </footer>
+
+    <template id="event-template">
+      <article class="event-card">
+        <header class="event-head">
+          <div class="event-author">
+            <img class="event-avatar" src="./assets/tibo-avatar.png" alt="" />
+            <div class="event-author-meta">
+              <div class="event-author-name"><strong>Tibo</strong><span class="verified-check" aria-label="Verified">✓</span><span class="event-kind"></span></div>
+              <span class="event-handle">@thsottiaux</span>
+            </div>
+          </div>
+          <span class="event-confidence"></span>
+        </header>
+        <div class="event-content">
+          <p></p>
+        </div>
+        <div class="event-tags"></div>
+        <div class="event-timestamp"><time></time><span class="event-source-label"></span></div>
+        <footer class="event-actions">
+          <span class="event-category"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5h16v10H9l-5 5v-15Z"/></svg><span class="event-category-label"></span></span>
+          <a class="event-link" target="_blank" rel="noreferrer" aria-label="Open source post"><span>Source</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 5h6v6M19 5l-9.5 9.5M16 13v5.5H5.5V8H11"/></svg></a>
+        </footer>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
