@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://tibo-radar.vercel.app">
-    <img src="./assets/tibo-radar-cover.png" alt="TIBO / RADAR dashboard" />
+    <img src="./assets/tibo-radar-cover.webp" alt="TIBO / RADAR dashboard" width="1200" />
   </a>
 </p>
 
